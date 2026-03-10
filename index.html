@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Koleksi karya digital munnnn666 x AI — games, buku, quiz, dan tools interaktif.">
+<title>m.studio — Koleksi Karya Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,400;12..96,600;12..96,700;12..96,800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#06060c;--deep:#0b0a14;--surface:#110f1e;--card:#15132a;--lift:#1e1b38;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);
+  --text:#e2ddf5;--muted:#7b7596;--dim:#3e3a56;
+  --pink:#ff2d6b;--cyan:#00e5ff;--violet:#b06bff;--amber:#ffb830;
+  --lime:#a3e635;--teal:#2dd4bf;--coral:#ff6b6b;--sky:#38bdf8;
+  --gold:#f5c842;--indigo:#818cf8;
+  --serif:'Bricolage Grotesque',system-ui,sans-serif;
+  --body:'Nunito',system-ui,sans-serif;
+  --mono:'Space Mono',monospace;
+  --smooth:cubic-bezier(.16,1,.3,1);
+  --spring:cubic-bezier(.175,.885,.32,1.275);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{background:var(--void);color:var(--text);font-family:var(--body);overflow-x:hidden;cursor:none;}
+@media(hover:none){body,button{cursor:auto!important;}}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:none;border:none;background:none;color:inherit;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--deep);}
+::-webkit-scrollbar-thumb{background:var(--dim);border-radius:5px;}
+
+/* CURSOR */
+#cdot,#cring{position:fixed;pointer-events:none;z-index:99999;border-radius:50%;transform:translate(-50%,-50%);}
+#cdot{width:7px;height:7px;background:var(--cyan);box-shadow:0 0 12px var(--cyan),0 0 24px rgba(0,229,255,.3);transition:width .15s,height .15s,background .2s;}
+#cring{width:38px;height:38px;border:1.5px solid rgba(0,229,255,.35);transition:width .25s var(--smooth),height .25s var(--smooth),border-color .2s;}
+body.ch #cdot{width:11px;height:11px;background:var(--pink);}
+body.ch #cring{width:54px;height:54px;border-color:rgba(255,45,107,.45);}
+@media(hover:none){#cdot,#cring{display:none;}}
+
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.22;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");}
+
+/* CANVAS */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;}
+
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(6,6,12,.8);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:transform .35s var(--smooth);}
+.topbar.hidden{transform:translateY(-100%);}
+.bar-brand{font-family:var(--serif);font-weight:800;font-size:1.1rem;letter-spacing:-.02em;}
+.bar-brand .dot{color:var(--cyan);}
+.bar-right{display:flex;align-items:center;gap:18px;}
+.bar-badge{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border2);padding:5px 12px;}
+.bar-cnt{font-family:var(--mono);font-size:.7rem;color:var(--cyan);opacity:.75;letter-spacing:.1em;}
+@media(max-width:600px){.topbar{padding:0 20px;}.bar-badge{display:none;}}
+
+/* HERO */
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 40px 100px;overflow:hidden;}
+.hglow{position:absolute;pointer-events:none;border-radius:50%;filter:blur(90px);opacity:0;animation:blobIn .9s var(--smooth) forwards;}
+.hg1{width:650px;height:650px;background:radial-gradient(circle,rgba(176,107,255,.16),transparent 70%);top:-80px;left:-60px;animation-delay:.1s;}
+.hg2{width:520px;height:520px;background:radial-gradient(circle,rgba(0,229,255,.1),transparent 70%);bottom:-40px;right:-40px;animation-delay:.25s;}
+.hg3{width:420px;height:420px;background:radial-gradient(circle,rgba(255,45,107,.09),transparent 70%);top:35%;left:50%;transform:translateX(-50%);animation-delay:.18s;}
+@keyframes blobIn{from{opacity:0;transform:scale(.75);}to{opacity:1;transform:scale(1);}}
+
+.eyebrow{font-family:var(--mono);font-size:.63rem;letter-spacing:.42em;text-transform:uppercase;color:var(--cyan);opacity:.75;margin-bottom:24px;animation:up .7s .2s both;}
+.hero-h{font-family:var(--serif);font-size:clamp(3rem,8.5vw,8rem);font-weight:800;line-height:.95;letter-spacing:-.04em;animation:up .7s .3s both;}
+.hero-h .ln-a{display:block;color:var(--text);}
+.hero-h .ln-b{display:block;font-style:italic;font-weight:200;background:linear-gradient(135deg,var(--violet),var(--cyan) 50%,var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:1.05em;}
+.creator-badge{display:inline-block;font-family:var(--mono);font-size:.15em;font-weight:700;font-style:normal;letter-spacing:.28em;text-transform:uppercase;background:none;-webkit-text-fill-color:var(--cyan);color:var(--cyan);border:1px solid rgba(0,229,255,.28);padding:.35em .75em;vertical-align:middle;margin-left:.4em;animation:glow 3s ease-in-out infinite;}
+@keyframes glow{0%,100%{border-color:rgba(0,229,255,.28);}50%{border-color:rgba(0,229,255,.6);box-shadow:0 0 18px rgba(0,229,255,.14);}}
+
+.hero-sub{font-size:1.05rem;color:var(--muted);max-width:480px;line-height:1.8;margin:28px auto 0;animation:up .7s .45s both;}
+
+.hstats{display:flex;margin:48px auto 0;border:1px solid var(--border2);animation:up .7s .55s both;overflow:hidden;}
+.hstat{padding:18px 38px;text-align:center;border-right:1px solid var(--border);}
+.hstat:last-child{border-right:none;}
+.hstat-n{font-family:var(--serif);font-size:2.1rem;font-weight:800;line-height:1;display:block;}
+.hstat-n.c{color:var(--cyan);}
+.hstat-n.p{color:var(--pink);}
+.hstat-n.v{color:var(--violet);}
+.hstat-l{font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:6px;display:block;}
+
+.hero-btn{margin-top:44px;animation:up .7s .65s both;}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--violet),var(--cyan));color:#000;font-family:var(--serif);font-size:.9rem;font-weight:700;letter-spacing:.04em;padding:15px 38px;border-radius:4px;position:relative;overflow:hidden;transition:transform .35s var(--smooth),box-shadow .35s;}
+.btn-primary:after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--cyan),var(--pink));opacity:0;transition:opacity .35s;}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 52px rgba(176,107,255,.35);}
+.btn-primary:hover:after{opacity:1;}
+.btn-primary span,.btn-primary svg{position:relative;z-index:1;}
+.btn-primary svg{transition:transform .3s var(--spring);}
+.btn-primary:hover svg{transform:translateY(5px);}
+
+.scroll-hint{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;font-family:var(--mono);font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);animation:fadeIn 1s 1.2s both;}
+.swire{width:1px;height:44px;background:linear-gradient(to bottom,var(--violet),transparent);animation:swire 2.5s ease-in-out infinite;}
+@keyframes swire{0%,100%{opacity:.25;transform:scaleY(.5);transform-origin:top;}50%{opacity:1;transform:scaleY(1);transform-origin:top;}}
+@keyframes up{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:none;}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+/* WORKS */
+.works{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:80px 48px 0;}
+.sec-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:20px;}
+.sec-ey{font-family:var(--mono);font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--violet);margin-bottom:10px;opacity:.8;}
+.sec-title{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;line-height:1.1;letter-spacing:-.03em;}
+.sec-title em{font-style:italic;color:var(--cyan);font-weight:200;}
+
+.filters{display:flex;gap:6px;flex-wrap:wrap;}
+.fbtn{font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:8px 18px;border:1px solid var(--border);color:var(--muted);cursor:none;position:relative;overflow:hidden;transition:color .2s,border-color .2s;}
+.fbtn:before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--violet),var(--cyan));opacity:0;transition:opacity .25s;}
+.fbtn:hover{color:var(--text);border-color:var(--border2);}
+.fbtn.on{color:#000 !important;border-color:transparent;font-weight:700;}
+.fbtn.on:before{opacity:1;}
+.fbtn span{position:relative;z-index:1;}
+@media(hover:none){.fbtn{cursor:pointer;}}
+
+/* CAT DIVIDER */
+.catdiv{position:relative;z-index:1;display:flex;align-items:center;gap:20px;padding:0 48px;max-width:1400px;margin:16px auto -6px;opacity:.65;}
+.catdiv:before,.catdiv:after{content:'';flex:1;height:1px;background:var(--border);}
+.catdiv-lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);white-space:nowrap;display:flex;align-items:center;gap:8px;}
+.catdiv-dot{width:6px;height:6px;border-radius:50%;}
+@media(max-width:600px){.catdiv,.works{padding-left:20px;padding-right:20px;}}
+
+/* GRID */
+.cgrid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px;padding:24px 48px 60px;max-width:1400px;margin:0 auto;}
+@media(max-width:1100px){.cgrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:700px){.cgrid{grid-template-columns:1fr;padding:18px 20px 40px;}}
+
+/* CARD */
+.wc{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:relative;display:flex;flex-direction:column;opacity:0;transform:translateY(28px);will-change:transform;transition:border-color .3s,box-shadow .3s;}
+.wc.vis{animation:cardIn .5s var(--smooth) forwards;}
+.wc.hf{display:none;}
+@keyframes cardIn{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:none;}}
+.wc:before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ac,var(--violet)),transparent);opacity:.65;transition:opacity .3s;}
+.wc:hover:before{opacity:1;}
+.wc:hover{box-shadow:0 6px 48px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.07),0 0 60px -20px var(--ac,var(--violet));border-color:rgba(255,255,255,.09);}
+.wc-head{padding:26px 26px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.wc-pill{font-family:var(--mono);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;padding:4px 10px;border-radius:100px;background:rgba(var(--acr,176,107,255),.12);border:1px solid rgba(var(--acr,176,107,255),.28);color:var(--ac,var(--violet));white-space:nowrap;}
+.wc-ico{width:52px;height:52px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.6rem;line-height:1;background:rgba(var(--acr,176,107,255),.07);border:1px solid rgba(var(--acr,176,107,255),.14);transition:transform .3s var(--spring),background .3s;}
+.wc:hover .wc-ico{transform:scale(1.1) rotate(-5deg);background:rgba(var(--acr,176,107,255),.14);}
+.wc-body{padding:16px 26px 20px;flex:1;display:flex;flex-direction:column;}
+.wc-title{font-family:var(--serif);font-size:1.25rem;font-weight:700;line-height:1.2;letter-spacing:-.02em;margin-bottom:9px;}
+.wc-desc{font-size:.86rem;color:var(--muted);line-height:1.75;flex:1;margin-bottom:18px;}
+.wc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:18px;}
+.wc-tag{font-family:var(--mono);font-size:.5rem;letter-spacing:.08em;padding:3px 8px;border-radius:3px;background:var(--lift);color:var(--dim);border:1px solid var(--border);transition:background .2s,color .2s;}
+.wc:hover .wc-tag{background:var(--surface);color:var(--muted);}
+.wc-foot{display:flex;align-items:center;justify-content:space-between;padding:14px 26px 20px;border-top:1px solid var(--border);}
+.wc-link{display:inline-flex;align-items:center;gap:7px;font-family:var(--serif);font-size:.82rem;font-weight:600;color:var(--ac,var(--violet));transition:gap .3s var(--spring);}
+.wc-link:hover{gap:14px;}
+.wc-arr{font-size:1rem;transition:transform .3s var(--spring);}
+.wc-link:hover .wc-arr{transform:translateX(4px);}
+.wc-live{font-family:var(--mono);font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;display:flex;align-items:center;gap:5px;color:var(--dim);}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--lime);box-shadow:0 0 6px var(--lime);animation:pulse 2.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.3);}}
+
+/* COLLAB */
+.collab{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:60px 48px 90px;}
+.collab-box{border:1px solid var(--border2);background:var(--surface);border-radius:24px;padding:72px 80px;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;position:relative;overflow:hidden;}
+.collab-box:before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 20% 50%,rgba(176,107,255,.055),transparent),radial-gradient(ellipse 50% 60% at 80% 50%,rgba(0,229,255,.035),transparent);pointer-events:none;}
+.c-ey{font-family:var(--mono);font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px;opacity:.75;}
+.c-h{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.05;letter-spacing:-.04em;margin-bottom:18px;}
+.c-h em{font-style:italic;font-weight:200;background:linear-gradient(90deg,var(--violet),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.c-body{font-size:.92rem;color:var(--muted);line-height:1.85;}
+.c-body strong{color:var(--text);}
+.c-cards{display:flex;flex-direction:column;gap:14px;position:relative;}
+.c-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 22px;transition:border-color .25s,transform .25s var(--smooth);}
+.c-card:hover{border-color:var(--border2);transform:translateX(7px);}
+.c-card-lbl{font-family:var(--mono);font-size:.52rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.c-card-val{font-family:var(--serif);font-size:1.05rem;font-weight:600;}
+.c-card-val.pink{color:var(--pink);}
+.c-card-val.cyan{color:var(--cyan);}
+.c-card-sub{font-family:var(--mono);font-size:.58rem;color:var(--dim);margin-top:3px;letter-spacing:.05em;}
+.c-xline{display:flex;align-items:center;gap:14px;margin:4px 0;}
+.c-xline:before,.c-xline:after{content:'';flex:1;height:1px;background:var(--border);}
+.c-x{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:.2em;}
+@media(max-width:900px){.collab-box{grid-template-columns:1fr;gap:36px;padding:48px 36px;}}
+@media(max-width:600px){.collab{padding:40px 20px 60px;}.collab-box{padding:36px 24px;}}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:44px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;max-width:1400px;margin:0 auto;}
+.f-brand{font-family:var(--serif);font-size:1rem;font-weight:700;}
+.f-brand .dot{color:var(--cyan);}
+.f-meta{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);text-align:center;}
+.f-cr{font-family:var(--mono);font-size:.58rem;color:var(--muted);text-align:right;}
+.f-cr strong{color:var(--pink);}
+.f-cr em{color:var(--cyan);font-style:normal;}
+@media(max-width:600px){footer{padding:30px 20px;flex-direction:column;align-items:center;text-align:center;}.f-cr{text-align:center;}}
+
+/* RIPPLE */
+.ripple-el{position:fixed;pointer-events:none;z-index:9000;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:radial-gradient(circle,rgba(0,229,255,.12),transparent 70%);animation:rout .65s ease-out forwards;}
+@keyframes rout{to{transform:translate(-50%,-50%) scale(1);opacity:0;width:160px;height:160px;}}
+</style>
+</head>
+<body>
+
+<div id="cdot"></div>
+<div id="cring"></div>
+<canvas id="bg-canvas"></canvas>
+
+<!-- TOPBAR -->
+<nav class="topbar" id="topbar">
+  <div class="bar-brand">m<span class="dot">.</span>studio</div>
+  <div class="bar-right">
+    <span class="bar-badge">Koleksi Digital &middot; 2025&ndash;2026</span>
+    <span class="bar-cnt">11 Karya</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hglow hg1"></div>
+  <div class="hglow hg2"></div>
+  <div class="hglow hg3"></div>
+
+  <div class="eyebrow">Koleksi Karya Digital</div>
+
+  <h1 class="hero-h">
+    <span class="ln-a">Semua Karya</span>
+    <span class="ln-b">Dalam Satu Pintu <span class="creator-badge">munnnn666</span></span>
+  </h1>
+
+  <p class="hero-sub">Games interaktif, buku digital, quiz sains, dan tools yang lahir dari kolaborasi satu manusia dengan kecerdasan buatan.</p>
+
+  <div class="hstats">
+    <div class="hstat">
+      <span class="hstat-n c" data-count="11">0</span>
+      <span class="hstat-l">Total Karya</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-n p" data-count="4">0</span>
+      <span class="hstat-l">Kategori</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-n v">&infin;</span>
+      <span class="hstat-l">Kreativitas</span>
+    </div>
+  </div>
+
+  <div class="hero-btn">
+    <button class="btn-primary" onclick="document.getElementById('works').scrollIntoView({behavior:'smooth'})">
+      <span>Jelajahi Semua Karya</span>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="swire"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- WORKS -->
+<div id="works">
+  <div class="works">
+    <div class="sec-top">
+      <div>
+        <div class="sec-ey">Portfolio</div>
+        <h2 class="sec-title">Semua <em>Karya</em></h2>
+      </div>
+      <div class="filters">
+        <button class="fbtn on" data-f="all"><span>Semua</span></button>
+        <button class="fbtn" data-f="game"><span>&#127918; Games</span></button>
+        <button class="fbtn" data-f="buku"><span>&#128218; Buku</span></button>
+        <button class="fbtn" data-f="web"><span>&#127760; Website</span></button>
+        <button class="fbtn" data-f="dev"><span>&#9881; Dev</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMES -->
+  <div class="catdiv" id="div-game">
+    <span class="catdiv-lbl"><span class="catdiv-dot" style="background:var(--pink);box-shadow:0 0 6px var(--pink)"></span>Games &amp; Interaktif</span>
+  </div>
+  <div class="cgrid">
+
+    <article class="wc" data-cat="game" style="--ac:var(--pink);--acr:255,45,107">
+      <div class="wc-head"><div class="wc-pill">&#127918; Game</div><div class="wc-ico">&#127922;</div></div>
+      <div class="wc-body">
+        <h3 class="wc-title">Truth or Dare</h3>
+        <p class="wc-desc">Game pergaulan seru dengan tantangan jujur atau aksi. Cocok dimainkan bersama teman-teman untuk menghangatkan suasana dan menciptakan kenangan tak terlupakan.</p>
+        <div class="wc-tags"><span class="wc-tag">Multiplayer</span><span class="wc-tag">Interaktif</span><span class="wc-tag">HTML5</span><span class="wc-tag">Party Game</span></div>
+      </div>
+      <div class="wc-foot">
+        <a href="./truth-or-dare.html" class="wc-link" target="_blank">Buka Sekarang <span class="wc-arr">&rarr;</span></a>
+        <span class="wc-live"><span class="live-dot"></span>Live</span>
+      </div>
+    </article>
+
+    <article class="wc" data-cat="game" style="--ac:var(--cyan);--acr:0,229,255">
+      <div class="wc-head"><div class="wc-pill" style="background:rgba(0,229,255,.12);border-color:rgba(0,229,255,.28);color:var(--cyan)">&#127918; Quiz</div><div class="wc-ico" style="background:rgba(0,229,255,.07);border-color:rgba(0,229,255,.14)">&#9883;&#65039;</div></div>
+      <div class="wc-body">
+        <h3 class="wc-title">QUANTUM &mdash; Sains SMA</h3>
+        <p class="wc-desc">Quiz sains SMA bergaya cyberpunk holographic. 60 soal dari 4 mata pelajaran, timer 90 menit, efek suara, dan confetti kemenangan. Dibuat oleh munnnn666.</p>
+        <div class="wc-tags"><span class="wc-tag">SMA</span><span class="wc-tag">Cyberpunk</span><span class="wc-tag">60 Soal</span><span class="wc-tag">munnnn666</span></div>
+      </div>
+      <div class="wc-foot">
+        <a href="./sains-sma.html" class="wc-link" style="color:var(--cyan)" target="_blank">Buka Sekarang <span class="wc-arr">&rarr;</span></a>
+        <span class="wc-live"><span class="live-dot"></span>Live</span>
+      </div>
+    </article>
+
+    <article class="wc" data-cat="game" style="--ac:var(--violet);--acr:176,107,255">
+      <div class="wc-head"><div class="wc-pill">&#127918; Quiz</div><div class="wc-ico">&#128301;</div></div>
+      <div class="wc-body">
+        <h3 class="wc-title">NEXUS &mdash; Quiz SMA</h3>
+        <p class="wc-desc">Ujian sains SMA bertema cosmos dan luar angkasa yang memukau. Dark space aesthetic dengan navigasi soal canggih dan visualisasi jawaban yang spektakuler.</p>
+        <div class="wc-tags"><span class="wc-tag">Space Theme</span><span class="wc-tag">SMA</span><span class="wc-tag">4 Mapel</span><span class="wc-tag">Timer</span></div>
+      </div>
+      <div class="wc-foot">
+        <a href="./nexus-quiz.html" class="wc-link" target="_blank">Buka Sekarang <span class="wc-arr">&rarr;</span></a>
+        <span class="wc-live"><span class="live-dot"></span>Live</span>
+      </div>
+    </article>
+
+    <article class="wc" data-cat="game" style="--ac:var(--amber);--acr:255,184,48">
+      <div class="wc-head"><div class="wc-pill" style="background:rgba(255,184,48,.12);border-color:rgba(255,184,48,.28);color:var(--amber)">&#127918; Quiz</div><div class="wc-ico" style="background:rgba(255,184,48,.07);border-color:rgba(255,184,48,.14)">&#127942;</div></div>
+      <div class="wc-body">
+        <h3 class="wc-title">APEX &mdash; Quiz Intensif</h3>
+        <p class="wc-desc">Latihan soal sains intensif untuk persiapan ujian. Dirancang untuk memaksimalkan performa dalam waktu singkat dengan soal-soal berkualitas tinggi.</p>
+        <div class="wc-tags"><span class="wc-tag">Intensif</span><span class="wc-tag">Latihan</span><span class="wc-tag">Timer</span><span class="wc-tag">Skor</span></div>
+      </div>
+      <div class="wc-foot">
+        <a href="./apex-quiz.html" class="wc-link" style="color:var(--amber)" target="_blank">Buka Sekarang <span class="wc-arr">&rarr;</span></a>
+        <span class="wc-live"><span class="live-dot"></span>Live</span>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- BUKU -->
+  <div class="catdiv" id="div-buku">
+    <span class="catdiv-lbl"><span class="catdiv-dot" style="background:var(--gold);box-shadow:0 0 6px var(--gold)"></span>Buku Digital</span>
+  </div>
+  <div class="cgrid">
+
+    <article class="wc" data-cat="buku" style="--ac:var(--gold);--acr:245,200,66">
+      <div class="wc-head"><div class="wc-pill" style="background:rgba(245,200,66,.12);border-color:rgba(245,200,66,.28);color:var(--gold)">&#128218; Buku</div><div class="wc-ico" style="background:rgba(245,200,66,.07);border-color:rgba(245,200,66,.14)">&#128225;</div></div>
+      <div class="wc-body">
+        <h3 class="wc-title">SIGNAL 2026</h3>
+        <p class="wc-desc">Panduan bertahan dan berkembang di era yang berubah. 8 bab tentang identitas, resiliensi, uang, AI, dan makna hidup. Edisi 2026 &mdash; kolaborasi munnnn666 &times; AI.</p>
+        <div class="wc-tags"><span class="wc-tag">8 Bab</span><span class="wc-tag">Self-growth</span><span class="wc-tag">Edisi 2026</span><span class="wc-tag">munnnn666 &times; AI</span></div>
+      </div>
+      <div class="wc-foot">
+        <a href="./signal-2026.html" class="wc-link" style="color:var(--gold)" target="_blank">Buka Sekarang <span class="wc-arr">&rarr;</span></a>
+        <span class="wc-live"><span class="live-dot"></span>Live</span>
+      </div>
+    </article>
+
+    <article class="wc" data-cat="buku" style="--ac:var(--teal);--acr:45,212,191">
+      <div class="wc-head"><div class="wc-pill" style="background:rgba(45,212,191,.12);border-color:rgba(45,212,191,.28);color:var(--teal)">&#128218; Buku</div><div class="wc-ico" style="background:rgba(45,212,191,.07);border-color:rgba(45,212,191,.14)">&#129504;</div></div>
+      <div class="wc-body">
+        <h3 class="wc-title">100 Pengetahuan Manusia Cerdas</h3>
+        <p class="wc-desc">100 prinsip generatif yang membentuk cara pandang manusia cerdas. 11 bab dari logika hingga filsafat. Dilengkapi search real-time, bookmark, dan mode terang/gelap.</p>
+        <div class="wc-tags"><span class="wc-tag">100 Prinsip</span><span class="wc-tag">11 Bab</span><span class="wc-tag">Search</span><span class="wc-tag">Bookmark</span></div>
+      </div>
+      <div class="wc-foot">
+        <a href="./100-pengetahuan-manusia-cerdas.html" class="wc-link" style="color:var(--teal)" target="_blank">Buka Sekarang <span class="wc-arr">&rarr;</span></a>
+        <span class="wc-live"><span class="live-dot"></span>Live</span>
+      </div>
+    </article>
+
+    <article class="wc" data-cat="buku" style="--ac:var(--sky);--acr:56,189,248">
+      <div class="wc-head"><div class="wc-pill" style="background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.28);color:var(--sky)">&#128218; Buku</div><div class="wc-ico" style="background:rgba(56,189,248,.07);border-color:rgba(56,189,248,.14)">&#127758;</div></div>
+      <div class="wc-body">
+        <h3 class="wc-title">Buku Dunia</h3>
+        <p class="wc-desc">Perjalanan visual memahami dunia di sekitar kita &mdash; dari alam hingga peradaban manusia, dikemas dalam pengalaman membaca yang imersif dan memukau.</p>
+        <div class="wc-tags"><span class="wc-tag">Visual</span><span class="wc-tag">Imersif</span><span class="wc-tag">Dunia</span><span class="wc-tag">Peradaban</span></div>
+      </div>
+      <div class="wc-foot">
+        <a href="./buku-dunia.html" class="wc-link" style="color:var(--sky)" target="_blank">Buka Sekarang <span class="wc-arr">&rarr;</span></a>
+        <span class="wc-live"><span class="live-dot"></span>Live</span>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- WEB -->
+  <div class="catdiv" id="div-web">
+    <span class="catdiv-lbl"><span class="catdiv-dot" style="background:var(--coral);box-shadow:0 0 6px var(--coral)"></span>Website Interaktif</span>
+  </div>
+  <div class="cgrid">
+
+    <article class="wc" data-cat="web" style="--ac:var(--coral);--acr:255,107,107">
+      <div class="wc-head"><div class="wc-pill" style="background:rgba(255,107,107,.12);border-color:rgba(255,107,107,.28);color:var(--coral)">&#127760; Website</div><div class="wc-ico" style="background:rgba(255,107,107,.07);border-color:rgba(255,107,107,.14)">&#128522;</div></div>
+      <div class="wc-body">
+        <h3 class="wc-title">Happiness</h3>
+        <p class="wc-desc">Website meditasi kebahagiaan interaktif. Temukan ketenangan dan kedamaian dalam pengalaman digital yang dirancang khusus untuk menenangkan pikiran dan jiwa.</p>
+        <div class="wc-tags"><span class="wc-tag">Meditasi</span><span class="wc-tag">Interaktif</span><span class="wc-tag">Wellness</span><span class="wc-tag">Mindful</span></div>
+      </div>
+      <div class="wc-foot">
+        <a href="./happiness.html" class="wc-link" style="color:var(--coral)" target="_blank">Buka Sekarang <span class="wc-arr">&rarr;</span></a>
+        <span class="wc-live"><span class="live-dot"></span>Live</span>
+      </div>
+    </article>
+
+    <article class="wc" data-cat="web" style="--ac:var(--lime);--acr:163,230,53">
+      <div class="wc-head"><div class="wc-pill" style="background:rgba(163,230,53,.12);border-color:rgba(163,230,53,.28);color:var(--lime)">&#127760; Website</div><div class="wc-ico" style="background:rgba(163,230,53,.07);border-color:rgba(163,230,53,.14)">&#127881;</div></div>
+      <div class="wc-body">
+        <h3 class="wc-title">Super Bahagia!</h3>
+        <p class="wc-desc">Portal energi positif dan kebahagiaan yang meledak-ledak. Ketika happiness biasa tidak cukup &mdash; ini versi turbo-charged, full-blast positivity yang kamu butuhkan.</p>
+        <div class="wc-tags"><span class="wc-tag">Positif</span><span class="wc-tag">Energi</span><span class="wc-tag">Fun</span><span class="wc-tag">Vibes</span></div>
+      </div>
+      <div class="wc-foot">
+        <a href="./super-bahagia.html" class="wc-link" style="color:var(--lime)" target="_blank">Buka Sekarang <span class="wc-arr">&rarr;</span></a>
+        <span class="wc-live"><span class="live-dot"></span>Live</span>
+      </div>
+    </article>
+
+    <article class="wc" data-cat="web" style="--ac:#f9a8d4;--acr:249,168,212">
+      <div class="wc-head"><div class="wc-pill" style="background:rgba(249,168,212,.12);border-color:rgba(249,168,212,.28);color:#f9a8d4">&#127760; Website</div><div class="wc-ico" style="background:rgba(249,168,212,.07);border-color:rgba(249,168,212,.14)">&#127800;</div></div>
+      <div class="wc-body">
+        <h3 class="wc-title">Kebahagiaan</h3>
+        <p class="wc-desc">Eksplorasi visual makna kebahagiaan sejati. Sebuah perjalanan reflektif yang mengajak kamu menemukan apa yang benar-benar membuat hidup menjadi bermakna.</p>
+        <div class="wc-tags"><span class="wc-tag">Reflektif</span><span class="wc-tag">Visual</span><span class="wc-tag">Mindful</span><span class="wc-tag">Jiwa</span></div>
+      </div>
+      <div class="wc-foot">
+        <a href="./kebahagiaan.html" class="wc-link" style="color:#f9a8d4" target="_blank">Buka Sekarang <span class="wc-arr">&rarr;</span></a>
+        <span class="wc-live"><span class="live-dot"></span>Live</span>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- DEV -->
+  <div class="catdiv" id="div-dev">
+    <span class="catdiv-lbl"><span class="catdiv-dot" style="background:var(--indigo);box-shadow:0 0 6px var(--indigo)"></span>Dev Tools</span>
+  </div>
+  <div class="cgrid">
+
+    <article class="wc" data-cat="dev" style="--ac:var(--indigo);--acr:129,140,248">
+      <div class="wc-head"><div class="wc-pill" style="background:rgba(129,140,248,.12);border-color:rgba(129,140,248,.28);color:var(--indigo)">&#9881; Dev Tool</div><div class="wc-ico" style="background:rgba(129,140,248,.07);border-color:rgba(129,140,248,.14)">&#129514;</div></div>
+      <div class="wc-body">
+        <h3 class="wc-title">E-Commerce Test Suite Viewer</h3>
+        <p class="wc-desc">Viewer interaktif untuk Java 21 Spring Boot test suite. Visualisasi 78+ test cases dengan breakdown per kategori, statistik coverage, dan dokumentasi arsitektur lengkap.</p>
+        <div class="wc-tags"><span class="wc-tag">Java 21</span><span class="wc-tag">Spring Boot</span><span class="wc-tag">JUnit 5</span><span class="wc-tag">Testcontainers</span><span class="wc-tag">JaCoCo</span></div>
+      </div>
+      <div class="wc-foot">
+        <a href="./test-suite-viewer.html" class="wc-link" style="color:var(--indigo)" target="_blank">Buka Sekarang <span class="wc-arr">&rarr;</span></a>
+        <span class="wc-live"><span class="live-dot"></span>Live</span>
+      </div>
+    </article>
+
+  </div>
+
+</div><!-- /works -->
+
+<!-- COLLAB SECTION -->
+<section class="collab">
+  <div class="collab-box">
+    <div>
+      <div class="c-ey">Tentang Kolaborasi Ini</div>
+      <h2 class="c-h">Manusia<br><em>bertemu</em><br>Mesin.</h2>
+      <p class="c-body">
+        Setiap karya di sini lahir dari satu proses yang sama:
+        <strong>visi dan ide dari munnnn666</strong>, dieksekusi bersama kecerdasan buatan
+        dalam percakapan panjang penuh iterasi, koreksi, dan kreativitas.
+        <br><br>
+        Ini bukan karya AI semata. Ini bukan karya manusia semata.
+        Ini adalah <strong>sesuatu yang baru</strong> &mdash; kategori karya
+        yang sebelumnya tidak mungkin ada tanpa keduanya.
+      </p>
+    </div>
+    <div class="c-cards">
+      <div class="c-card">
+        <div class="c-card-lbl">Kreator &amp; Visi</div>
+        <div class="c-card-val pink">munnnn666</div>
+        <div class="c-card-sub">Ide &middot; Arahan &middot; Jiwa</div>
+      </div>
+      <div class="c-xline"><span class="c-x">&times; KOLABORASI</span></div>
+      <div class="c-card">
+        <div class="c-card-lbl">Eksekusi &amp; Kemampuan</div>
+        <div class="c-card-val cyan">Kecerdasan Buatan</div>
+        <div class="c-card-sub">Kode &middot; Desain &middot; Implementasi</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-lbl">Hasilnya</div>
+        <div class="c-card-val" style="font-size:.88rem;color:var(--muted);font-weight:400;font-family:var(--body)">11 karya original yang tidak bisa dibuat oleh salah satunya sendirian &mdash; games, buku, quiz, dan tools yang nyata.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-brand">m<span class="dot">.</span>studio</div>
+  <div class="f-meta">Koleksi Digital &middot; 2025&ndash;2026<br>11 Karya &middot; 4 Kategori</div>
+  <div class="f-cr">Dibuat oleh <strong>munnnn666</strong><br>bersama <em>Kecerdasan Buatan</em></div>
+</footer>
+
+<script>
+/* CURSOR */
+const D=document.getElementById('cdot'),R=document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;D.style.left=mx+'px';D.style.top=my+'px';});
+(function ac(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;R.style.left=rx+'px';R.style.top=ry+'px';requestAnimationFrame(ac);})();
+document.querySelectorAll('a,button,.fbtn,.wc').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+});
+
+/* CLICK RIPPLE */
+document.addEventListener('click',e=>{
+  const r=document.createElement('div');r.className='ripple-el';
+  r.style.cssText='left:'+e.clientX+'px;top:'+e.clientY+'px;width:10px;height:10px;';
+  document.body.appendChild(r);setTimeout(()=>r.remove(),700);
+});
+
+/* CANVAS STARS */
+(function(){
+  const cv=document.getElementById('bg-canvas'),cx=cv.getContext('2d');
+  let W,H,stars=[],nebs=[];
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  class Star{
+    constructor(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.1+.15;this.a=Math.random();this.sp=Math.random()*.003+.001;this.ph=Math.random()*Math.PI*2;}
+    draw(t){const a=this.a*(.35+.65*Math.abs(Math.sin(t*this.sp+this.ph)));cx.beginPath();cx.arc(this.x,this.y,this.r,0,Math.PI*2);cx.fillStyle='rgba(200,190,255,'+a+')';cx.fill();}
+  }
+  class Neb{
+    constructor(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*220+70;this.ph=Math.random()*Math.PI*2;const c=['176,107,255','0,229,255','255,45,107','255,184,48','45,212,191','255,107,107'];this.c=c[Math.floor(Math.random()*c.length)];}
+    draw(t){const a=.035+.018*Math.sin(t*.0005+this.ph);const g=cx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r);g.addColorStop(0,'rgba('+this.c+','+a+')');g.addColorStop(1,'transparent');cx.beginPath();cx.arc(this.x,this.y,this.r,0,Math.PI*2);cx.fillStyle=g;cx.fill();}
+  }
+  for(let i=0;i<160;i++)stars.push(new Star());
+  for(let i=0;i<9;i++)nebs.push(new Neb());
+  let t=0;
+  function draw(){cx.clearRect(0,0,W,H);nebs.forEach(n=>n.draw(t));stars.forEach(s=>s.draw(t));t++;requestAnimationFrame(draw);}
+  draw();
+})();
+
+/* COUNTER */
+function cnt(el,n,dur=1200){
+  let st=null;
+  (function step(ts){
+    if(!st)st=ts;
+    const p=Math.min((ts-st)/dur,1),e=p<.5?2*p*p:-1+(4-2*p)*p;
+    el.textContent=Math.round(e*n);
+    if(p<1)requestAnimationFrame(step);else el.textContent=n;
+  })(performance.now());
+}
+const cObs=new IntersectionObserver(es=>{es.forEach(e=>{if(!e.isIntersecting)return;const n=parseInt(e.target.dataset.count);if(!isNaN(n))cnt(e.target,n);cObs.unobserve(e.target);});},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>cObs.observe(el));
+
+/* CARD REVEAL */
+let rb=0,rt=0;
+const obs=new IntersectionObserver(es=>{
+  const now=Date.now();if(now-rt>500)rb=0;rt=now;
+  es.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const d=(rb++%4)*80;e.target.style.animationDelay=d+'ms';e.target.classList.add('vis');obs.unobserve(e.target);
+  });
+},{threshold:.06,rootMargin:'0px 0px -36px 0px'});
+document.querySelectorAll('.wc').forEach(c=>obs.observe(c));
+
+/* 3D TILT */
+document.querySelectorAll('.wc').forEach(card=>{
+  let raf,tx=0,ty=0,cx2=0,cy2=0,hov=false;
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function anim(){
+    cx2=lerp(cx2,tx,.11);cy2=lerp(cy2,ty,.11);
+    card.style.transform=hov?`perspective(900px) rotateY(${cx2}deg) rotateX(${cy2}deg) translateZ(5px)`:`perspective(900px) rotateY(${cx2}deg) rotateX(${cy2}deg)`;
+    if(hov||Math.abs(cx2)>.01||Math.abs(cy2)>.01)raf=requestAnimationFrame(anim);else raf=null;
+  }
+  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();tx=((e.clientX-r.left-r.width/2)/r.width)*11;ty=-((e.clientY-r.top-r.height/2)/r.height)*11;if(!raf)raf=requestAnimationFrame(anim);});
+  card.addEventListener('mouseenter',()=>{hov=true;});
+  card.addEventListener('mouseleave',()=>{hov=false;tx=0;ty=0;if(!raf)raf=requestAnimationFrame(anim);});
+});
+
+/* FILTER */
+document.querySelectorAll('.fbtn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    const f=btn.dataset.f;
+    document.querySelectorAll('.wc').forEach(c=>c.classList.toggle('hf',f!=='all'&&c.dataset.cat!==f));
+    document.querySelectorAll('.catdiv').forEach(d=>{
+      if(f==='all'){d.style.display='';return;}
+      const g=d.nextElementSibling;
+      const vis=g&&[...g.querySelectorAll('.wc')].some(c=>!c.classList.contains('hf'));
+      d.style.display=vis?'':'none';
+    });
+  });
+});
+
+/* TOPBAR HIDE */
+let lsy=0;const tb=document.getElementById('topbar');
+window.addEventListener('scroll',()=>{const sy=window.scrollY;if(sy>lsy&&sy>80)tb.classList.add('hidden');else tb.classList.remove('hidden');lsy=sy;},{passive:true});
+</script>
+</body>
+</html>
