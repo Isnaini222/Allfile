@@ -1,1 +1,1 @@
-my karay
+my karya
